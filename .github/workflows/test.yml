@@ -8,3 +8,4 @@ jobs:
      - uses: actions/checkout@v4
      - run: pwd
      - run: ls -la
+     - run: ./hello-echo.sh
