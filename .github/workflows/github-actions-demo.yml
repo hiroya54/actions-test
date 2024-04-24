@@ -27,5 +27,5 @@ jobs:
       - name: Env Test
         run: echo $TEST
         env:
-          TEST: loaded env param
+          TEST1: loaded env param
       
