@@ -11,12 +11,4 @@ jobs:
           node-version: '20'
       - run: npm install -g bats
       - run: bats -v
-  check-bats-version2:
-    runs-on: ubintu-latest
-    steps:
-      - uses: actions/checkout@4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm install -g bats
-      - run: bats -v
+      
