@@ -1,0 +1,56 @@
+name: pull-stg
+on:
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - README.md
+
+jobs:
+  dryrun:
+    runs-on: ubuntu-latest
+    permissions:
+      # oidcトークンをフェッチ
+      # githubがAWSやAzureなどの他のサービスに対して認証を行う際に使用される
+      id-token: write
+      # リポジトリ内の読み取り権限
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          # 過剰な権限付与していそう
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          # sandbox完了のARN
+          # ロール自体はCDKで設定している？（仮説）
+          # IAMロールによる一時的な認証情報を取得したい場合は、事前にGitHubをIdPとして設定しておく必要がある
+          role-to-assume: arn:aws:iam::404396764474:role/StgSol-CicdGitHubRole872752F6-1UCPJHHQ2HK2V
+          aws-region: ap-northeast-1
+      - name: run cdk diff --no-change-set
+        id: run_cdk_diff
+        uses: ./.github/actions/run_cdk_diff
+        with:
+          infraDir: ./infra
+          environment: stg
+      - name: send comment to pull request
+        uses: actions/github-script#v6
+        with: 
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'result of `cdk diff --no-change-set` command.\n```${{ steps.run_cdk_diff.outputs.result }}\n```'
+            })
+      - name: run lint check
+        uses: ./github/actions/run_lint_check
+        with:
+          infraDir: ./infra
+      - name: run snapshot test
+        uses: ./.github/actions/run_snapshot_test
+        with:
+          infraDir: ./infra
+

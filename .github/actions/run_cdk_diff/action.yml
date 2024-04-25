@@ -1,0 +1,20 @@
+name: run-cdk-diff
+author: hiroy_yamaguchi@pkshatech.com
+description: run 'cdk diff --no-change-set' command
+inputs:
+  infraDir:
+    description: cdk top directory
+    required: true
+  environment:
+    description: environment name
+    required: true
+  nodeVersion:
+    description: nodejs major version
+    required: true
+    dafault: 18
+outputs:
+  result:
+    value: ${{ steps.run_cdk_diff.outputs.result}}
+runs:
+  # compositeは複数のアクションをまとめて実行する
+  using: composite
