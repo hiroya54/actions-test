@@ -1,0 +1,16 @@
+name: composite-action-test
+description: Demonstrate the use of composite run step
+inputs:
+  some_input:
+  description: input parameter
+  requited: true
+
+runs:
+  using: composite
+  steps:
+    - run: echo "Hello, ${{ inputs.some_input }}"
+      shell: bash
+    - run: echo "Setting up environment..."
+      shell: bash
+    - run: ./hello-echo.sh
+      shell: bash

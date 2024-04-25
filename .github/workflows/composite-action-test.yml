@@ -1,0 +1,12 @@
+name: composite-action-test
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run composite action
+        uses: ./.github/actions/run_action_test
+        with:
+          some_input: 'composite action'
