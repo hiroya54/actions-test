@@ -2,8 +2,8 @@ name: composite-action-test
 description: Demonstrate the use of composite run step
 inputs:
   some_input:
-  description: input parameter
-  requited: true
+    description: input parameter
+    requited: true
 
 runs:
   using: composite
