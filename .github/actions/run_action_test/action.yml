@@ -12,5 +12,7 @@ runs:
       shell: bash
     - run: echo "Setting up environment..."
       shell: bash
-    - run: ./hello-echo.sh
+    - run: |
+        chmod 755 hello-echo.sh
+        ./hello-echo.sh
       shell: bash
